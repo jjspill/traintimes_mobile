@@ -16,12 +16,14 @@ import FrownFace from '@/components/FrownFace';
 import Header from '@/components/HeaderComponent';
 import { StatusBox } from '@/components/StatusBox';
 import { useStationFetch } from '@/contexts/StationFetchContext';
-import { set } from 'date-fns';
-import { Link } from 'expo-router';
-import EmojiPicker from '@/components/SwipeRightModal';
-import CircleButton from '@/components/CircleButton';
+import { getLineFamily } from '@/utils/trainUtils';
+import { Station } from '@/types/types';
 
-export const TrainsContainer = () => {
+export const TrainsContainer = ({
+  selectedFamilies,
+}: {
+  selectedFamilies: string[];
+}) => {
   const [searchRadius, setSearchRadius] = useState(0.25);
   const { refreshCounter, resetCountdown } = useContinuousCountdown();
   const { location, errorMsg } = useCurrentLocation();
@@ -29,19 +31,6 @@ export const TrainsContainer = () => {
   const { activeFetches, lastFetchTime } = useStationFetch();
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  // ...rest of the code remains same
-
-  const onAddSticker = () => {
-    setIsModalVisible(true);
-  };
-
-  const onModalClose = () => {
-    setIsModalVisible(false);
-  };
-
-  console.log('isModalVisible', isModalVisible);
 
   const onRefresh = useCallback(() => {
     setSearchRadius(0.5);
@@ -63,6 +52,19 @@ export const TrainsContainer = () => {
     }
   };
 
+  const renderItem = ({ item }: { item: Station }) => {
+    if (
+      selectedFamilies.length === 0 ||
+      !selectedFamilies.includes(getLineFamily(item.stopId))
+    ) {
+      return null;
+    }
+
+    return (
+      <AsyncStationComponent stationIn={item} refreshCounter={refreshCounter} />
+    );
+  };
+
   if (nearestStations.length === 0) {
     return <FrownFace caption={errorMsg || 'No location found'} />;
   }
@@ -70,26 +72,11 @@ export const TrainsContainer = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="black" />
-
-      <View style={{ top: 50, zIndex: 10 }}>
-        <Text style={{ color: 'red' }}> HERE </Text>
-        <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
-          {/* A list of emoji component will go here */}
-          <Text>Emoji Picker</Text>
-        </EmojiPicker>
-        <CircleButton onPress={onAddSticker} />
-      </View>
-
       <Header />
       <FlatList
         data={nearestStations}
         keyExtractor={(item) => item.stopId}
-        renderItem={({ item }) => (
-          <AsyncStationComponent
-            stationIn={item}
-            refreshCounter={refreshCounter}
-          />
-        )}
+        renderItem={renderItem}
         ListHeaderComponent={() => (
           <>
             <StatusBox

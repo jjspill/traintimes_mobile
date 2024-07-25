@@ -110,6 +110,14 @@ export const SixComponent = () => {
   );
 };
 
+export const SixXComponent = () => {
+  return (
+    <View style={[styles.diamond, { backgroundColor: '#00933c' }]}>
+      <Text style={styles.diamondText}>6</Text>
+    </View>
+  );
+};
+
 export const AComponent = () => (
   <View style={[styles.circle, { backgroundColor: '#0139a6' }]}>
     <Text style={styles.text}>A</Text>
@@ -158,6 +166,12 @@ export const SevenComponent = () => (
   </View>
 );
 
+export const SevenXComponent = () => (
+  <View style={[styles.diamond, { backgroundColor: '#ba33ad' }]}>
+    <Text style={styles.diamondText}>7</Text>
+  </View>
+);
+
 export const GComponent = () => (
   <View style={[styles.circle, { backgroundColor: '#6cbe44' }]}>
     <Text style={styles.text}>G</Text>
@@ -187,6 +201,7 @@ export const trainIconMap: { [key: string]: FunctionComponent } = {
   '4': FourComponent,
   '5': FiveComponent,
   '6': SixComponent,
+  '6X': SixXComponent,
   A: AComponent,
   C: CComponent,
   E: EComponent,
@@ -195,7 +210,21 @@ export const trainIconMap: { [key: string]: FunctionComponent } = {
   L: LComponent,
   S: SComponent,
   '7': SevenComponent,
+  '7X': SevenXComponent,
   G: GComponent,
+};
+
+export const trainFamilyComponents: Record<string, React.FC[]> = {
+  'Lexington Avenue': [FourComponent, FiveComponent, SixComponent],
+  '6 Avenue': [BComponent, DComponent, FComponent, MComponent],
+  Broadway: [NComponent, QComponent, RComponent, WComponent],
+  '7 Avenue': [OneComponent, TwoComponent, ThreeComponent],
+  '8 Avenue': [AComponent, CComponent, EComponent],
+  'Nassau Street': [JComponent, ZComponent],
+  Flushing: [SevenComponent],
+  '14 Street': [LComponent],
+  Crosstown: [GComponent],
+  Shuttle: [SComponent],
 };
 
 const styles = StyleSheet.create({
@@ -205,10 +234,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 16,
+    // transform: [{ rotate: '45deg' }],
+  },
+  diamond: {
+    width: 28,
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ rotate: '45deg' }],
+    marginRight: 4,
   },
   text: {
     color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  diamondText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    transform: [{ rotate: '-45deg' }],
   },
 });

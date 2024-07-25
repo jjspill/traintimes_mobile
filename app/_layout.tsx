@@ -5,13 +5,15 @@ import { Drawer } from 'expo-router/drawer';
 
 export default function RootLayout() {
   return (
+    // <GestureHandlerRootView style={{ flex: 1 }}>
     <Stack
       screenOptions={{
         headerShown: false,
       }}
     >
       <Stack.Screen name="index" />
-      <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+      {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
     </Stack>
+    //  </GestureHandlerRootView>
   );
 }

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Header = () => {
+const Header = ({ title = 'Subway' }: { title?: string }) => {
   return (
     <>
       <SafeAreaView
@@ -11,7 +11,7 @@ const Header = () => {
 
       <View style={styles.header}>
         <View style={styles.whiteLine} />
-        <Text style={styles.title}>Subway</Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
     </>
   );

@@ -6,6 +6,7 @@ import TrainComponent from './TrainsComponent';
 import DirectionsButton from './DirectionsComponent';
 import { useStation } from '@/hooks/useStation';
 import { Station } from '@/types/types';
+import { getLineFamily } from '@/utils/trainUtils';
 
 interface AsyncStationComponentProps {
   stationIn: Station;
