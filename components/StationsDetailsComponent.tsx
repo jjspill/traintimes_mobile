@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     fontFamily: Default.fontFamily,
+    textAlign: 'center',
   },
   headsign: {
     color: '#FFFFFF',

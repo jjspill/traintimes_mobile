@@ -1,6 +1,6 @@
 import { StationFetchProvider } from '@/contexts/StationFetchContext';
 import TrainsContainer from '@/screens/TrainsContainer';
-import { Text, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function Index() {
   return (

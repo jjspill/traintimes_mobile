@@ -30,13 +30,10 @@ export const StationFetchProvider: FC<{ children: ReactNode }> = ({
 
   const endFetch = () => {
     setActiveFetches((prev) => {
-      // Check if the current active fetches is 1, which means this is the last active fetch
       if (prev === 1) {
-        // If this is the last fetch, update the lastFetchTime
-        console.log('All fetches complete, setting last fetch time');
         setLastFetchTime(new Date().toLocaleTimeString());
       }
-      return prev - 1; // Decrement the number of active fetches
+      return prev - 1;
     });
   };
 

@@ -16,7 +16,6 @@ export const useNearestStations = (
     const findNearestStations = async () => {
       if (!location || !searchRadius) return;
 
-      // Assuming findClosestStations and sortSubwayStops are correctly typed elsewhere
       try {
         const closestStations = findClosestStations(
           location.lat,

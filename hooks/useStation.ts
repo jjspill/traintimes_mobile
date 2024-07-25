@@ -11,7 +11,6 @@ export const useStation = (station: Station, refreshCounter: number) => {
     const fetchStop = async () => {
       startFetch();
       try {
-        // console.log('Fetching stop:', station);
         const response = await fetch(`https://www.traintimes.nyc/api`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
