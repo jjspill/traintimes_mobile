@@ -18,16 +18,21 @@ import { StatusBox } from '@/components/StatusBox';
 import { useStationFetch } from '@/contexts/StationFetchContext';
 import { getLineFamily } from '@/utils/trainUtils';
 import { Station } from '@/types/types';
+import { Location } from '@/types/types';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export const TrainsContainer = ({
   selectedFamilies,
+  customLocation,
 }: {
   selectedFamilies: string[];
+  customLocation?: Location;
 }) => {
   const [searchRadius, setSearchRadius] = useState(0.25);
   const { refreshCounter, resetCountdown } = useContinuousCountdown();
   const { location, errorMsg } = useCurrentLocation();
-  const { nearestStations } = useNearestStations(location, searchRadius);
+  const locationToUse = customLocation || location;
+  const { nearestStations } = useNearestStations(locationToUse, searchRadius);
   const { activeFetches, lastFetchTime } = useStationFetch();
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -81,7 +86,8 @@ export const TrainsContainer = ({
           <>
             <StatusBox
               lastRefreshTime={lastFetchTime}
-              currentLocation={location}
+              currentLocation={locationToUse}
+              usingCurrentLocation={locationToUse !== location}
             />
           </>
         )}

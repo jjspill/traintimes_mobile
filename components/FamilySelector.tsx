@@ -1,12 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Dimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { trainFamilyComponents } from './TrainIcons';
 
 const FamilySelector = ({
@@ -39,15 +32,15 @@ const FamilySelector = ({
   }, [selectedFamilies, onSelectionChange]);
 
   const groupedFamilies = [
-    ['Broadway', '6 Avenue'],
-    ['Lexington Avenue', '7 Avenue'],
-    ['8 Avenue', 'Nassau Street', 'Flushing'],
-    ['14 Street', 'Crosstown', 'Shuttle'],
+    ['Broadway', '6 Ave'],
+    ['Lexington Ave', '7 Ave'],
+    ['8 Ave', 'Nassau St', 'Flushing'],
+    ['14 St', 'Crosstown', 'Shuttle'],
   ];
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Filter by Line</Text>
+      <Text style={styles.title}>Select Train Lines</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleSelectAll}>
           <Text>Select All</Text>
@@ -82,39 +75,39 @@ const FamilyBox = ({
   toggleFamily: (family: string) => void;
 }) => {
   const backgroundColor = isSelected ? '#4CAF50' : '#F5F5F5';
-  const scale = new Animated.Value(1);
-
-  useEffect(() => {
-    Animated.spring(scale, {
-      toValue: isSelected ? 1 : 1,
-      useNativeDriver: true,
-    }).start();
-  }, [isSelected]);
 
   return (
     <TouchableOpacity
       onPress={() => toggleFamily(familyName)}
       style={[styles.box, { backgroundColor }]}
+      activeOpacity={0.3}
     >
-      <Animated.View style={[styles.boxContent, { transform: [{ scale }] }]}>
+      <View style={[styles.boxContent]}>
         <Text style={styles.familyName}>{familyName}</Text>
         <View style={styles.iconsContainer}>
           {trainFamilyComponents[familyName].map((TrainIcon, index) => (
             <View key={index} style={{ marginHorizontal: 1 }}>
-              <TrainIcon key={index} />
+              <TrainIcon key={index} scale={0.8} />
             </View>
           ))}
         </View>
-      </Animated.View>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     alignItems: 'center',
-    paddingTop: 20,
+    backgroundColor: 'white',
+    zIndex: -1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    textAlign: 'center',
   },
   header: {
     fontSize: 20,

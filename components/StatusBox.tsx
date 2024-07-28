@@ -4,11 +4,13 @@ import { Location } from '@/types/types';
 interface StatusBoxProps {
   lastRefreshTime: string;
   currentLocation: Location | null;
+  usingCurrentLocation: boolean;
 }
 
 export const StatusBox: React.FC<StatusBoxProps> = ({
   lastRefreshTime,
   currentLocation,
+  usingCurrentLocation,
 }) => {
   return (
     <View style={styles.container}>
@@ -17,6 +19,9 @@ export const StatusBox: React.FC<StatusBoxProps> = ({
         <Text style={styles.text}>
           Location: {currentLocation.lat}, {currentLocation.lng}
         </Text>
+      )}
+      {!usingCurrentLocation && (
+        <Text style={styles.text}>Using Current Location</Text>
       )}
     </View>
   );
