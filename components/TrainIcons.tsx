@@ -144,7 +144,7 @@ export const UnknownTrainComponent = ({
   scale?: number;
 }) => <TrainComponent color="slategray" label={routeId} scale={scale} />;
 
-export const trainIconMap: { [key: string]: FunctionComponent } = {
+export const trainIconMap: Record<string, React.FC<TrainIconProps>> = {
   N: NComponent,
   Q: QComponent,
   R: RComponent,

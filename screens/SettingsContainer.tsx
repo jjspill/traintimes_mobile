@@ -16,7 +16,7 @@ export const SettingsContainer = ({
   setCustomLocation,
 }: {
   onSelectionChange: (selectedFamilies: string[]) => void;
-  setCustomLocation: (location: Location) => void;
+  setCustomLocation: (location: Location | undefined) => void;
 }) => {
   const addressInputHeight = useRef(new Animated.Value(0)).current;
   const screenHeight = Dimensions.get('window').height;
@@ -39,7 +39,7 @@ export const SettingsContainer = ({
 
   const addressInputStyle = addressInputHeight.interpolate({
     inputRange: [0, 1],
-    outputRange: [screenHeight * 0.11, screenHeight],
+    outputRange: [screenHeight * 0.15, screenHeight],
   });
 
   const familySelectorOpacity = addressInputHeight.interpolate({
@@ -51,18 +51,18 @@ export const SettingsContainer = ({
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="black" />
       <Header title="Settings" />
-      <Animated.View
+      {/* <Animated.View
         style={{ height: addressInputStyle, backgroundColor: 'white' }}
-      >
-        <AddressInput
-          onFocus={onFocusInput}
-          onBlur={onBlurInput}
-          setCoordinates={setCustomLocation}
-        />
-      </Animated.View>
-      <Animated.View style={{ flex: 1, opacity: familySelectorOpacity }}>
-        <FamilySelector onSelectionChange={onSelectionChange} />
-      </Animated.View>
+      > */}
+      {/* <AddressInput
+        onFocus={onFocusInput}
+        onBlur={onBlurInput}
+        setCoordinates={setCustomLocation}
+      /> */}
+      {/* </Animated.View>
+      <Animated.View style={{ flex: 1, opacity: familySelectorOpacity }}> */}
+      <FamilySelector onSelectionChange={onSelectionChange} />
+      {/* </Animated.View> */}
     </View>
   );
 };

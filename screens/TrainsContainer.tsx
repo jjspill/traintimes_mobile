@@ -19,7 +19,6 @@ import { useStationFetch } from '@/contexts/StationFetchContext';
 import { getLineFamily } from '@/utils/trainUtils';
 import { Station } from '@/types/types';
 import { Location } from '@/types/types';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export const TrainsContainer = ({
   selectedFamilies,
