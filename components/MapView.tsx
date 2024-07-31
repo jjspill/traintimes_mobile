@@ -68,7 +68,6 @@ const MapScreen = ({ onSwipeBack }: { onSwipeBack: any }) => {
         touchInfo.startX > screenWidth - 50 &&
         touchInfo.startX > locationX
       ) {
-        console.log('swiped left', touchInfo.startX, locationX);
         onSwipeBack();
       }
     }
