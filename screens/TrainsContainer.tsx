@@ -19,6 +19,20 @@ import { useStationFetch } from '@/contexts/StationFetchContext';
 import { getLineFamily } from '@/utils/trainUtils';
 import { Station } from '@/types/types';
 import { Location } from '@/types/types';
+import { useStationMap } from '@/hooks/useStationMap';
+import SyncStationComponent from '@/components/SyncTrainComponent';
+
+interface TrainsContainerProps {
+  selectedFamilies: string[];
+  customLocation?: Location;
+  searchRadius?: number;
+  setSearchRadius?: (radius: number) => void;
+  refreshCounter?: number;
+  resetCountdown?: () => void;
+  location?: Location;
+  errorMsg?: string;
+  nearestStations?: Station[];
+}
 
 export const TrainsContainer = ({
   selectedFamilies,
@@ -32,6 +46,7 @@ export const TrainsContainer = ({
   const { location, errorMsg } = useCurrentLocation();
   const locationToUse = customLocation || location;
   const { nearestStations } = useNearestStations(locationToUse, searchRadius);
+  const stops = useStationMap(nearestStations);
   const { activeFetches, lastFetchTime } = useStationFetch();
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -65,7 +80,10 @@ export const TrainsContainer = ({
     }
 
     return (
-      <AsyncStationComponent stationIn={item} refreshCounter={refreshCounter} />
+      <SyncStationComponent
+        fetchedStation={item}
+        refreshCounter={refreshCounter}
+      />
     );
   };
 
@@ -78,7 +96,7 @@ export const TrainsContainer = ({
       <StatusBar barStyle="light-content" backgroundColor="black" />
       <Header />
       <FlatList
-        data={nearestStations}
+        data={stops.stops}
         keyExtractor={(item) => item.stopId}
         renderItem={renderItem}
         ListHeaderComponent={() => (
