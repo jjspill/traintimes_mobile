@@ -20,14 +20,14 @@ export default function useCurrentLocation() {
         locationSubscription = await Location.watchPositionAsync(
           { accuracy: Location.Accuracy.Highest, timeInterval: 10000 },
           (currentLocation) => {
-            // setLocation({
-            //   lat: currentLocation.coords.latitude,
-            //   lng: currentLocation.coords.longitude,
-            // });
             setLocation({
-              lat: 40.7527,
-              lng: -73.9772,
+              lat: currentLocation.coords.latitude,
+              lng: currentLocation.coords.longitude,
             });
+            // setLocation({
+            //   lat: 40.7527,
+            //   lng: -73.9772,
+            // });
           },
         );
       } catch (error) {

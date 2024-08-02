@@ -17,6 +17,8 @@ import { useStationMap } from '@/hooks/useStationMap';
 import GeoJsons from './GeoJsons';
 import * as ExpoLocation from 'expo-location';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Import Ionicons
+import { useStations } from '@/contexts/StationContext';
+import { getLineFamily } from '@/utils/trainUtils';
 
 async function getLocationPermission() {
   let { status } = await ExpoLocation.requestForegroundPermissionsAsync();
@@ -35,11 +37,21 @@ interface TouchInfo {
 
 const screenWidth = Dimensions.get('window').width;
 
-const MapScreen = ({ onSwipeBack }: { onSwipeBack: any }) => {
+const MapScreen = ({
+  onSwipeBack,
+  selectedFamilies,
+}: {
+  onSwipeBack: any;
+  selectedFamilies: string[];
+}) => {
   getLocationPermission();
-  const { location, errorMsg } = useCurrentLocation();
-  const { nearestStations } = useNearestStations(location);
-  const stops = useStationMap(nearestStations);
+
+  const { stations, location, errorMsg } = useStations();
+
+  // const { location, errorMsg } = useCurrentLocation();
+  // const { nearestStations } = useNearestStations(location);
+  // const stops = useStationMap(nearestStations);
+
   const [touchInfo, setTouchInfo] = useState<TouchInfo | null>(null);
   const mapRef = React.useRef<MapView>(null);
 
@@ -88,7 +100,7 @@ const MapScreen = ({ onSwipeBack }: { onSwipeBack: any }) => {
     }
   };
 
-  if (!location || !stops.stops) {
+  if (!location || !stations) {
     return (
       <View style={styles.container}>
         <Text>{errorMsg || 'Waiting for location...'}</Text>
@@ -116,29 +128,33 @@ const MapScreen = ({ onSwipeBack }: { onSwipeBack: any }) => {
         showsMyLocationButton={true}
       >
         <GeoJsons />
-        {stops.stops &&
-          stops.stops.map((station) => (
-            <Marker
-              key={station.stopId}
-              coordinate={{
-                latitude: station.coordinates.lat,
-                longitude: station.coordinates.lng,
-              }}
-              title={station.stopName}
-            >
-              <View style={styles.markerStyle}>
-                <Image
-                  source={require('../assets/images/marker.png')}
-                  style={styles.imageStyle}
-                />
-              </View>
-              <Callout tooltip>
-                <View style={styles.calloutContainer}>
-                  <AsyncStationComponent2 stationIn={station} />
+        {Object.values(stations) &&
+          Object.values(stations)
+            .filter((station) =>
+              selectedFamilies.includes(getLineFamily(station.stopId)),
+            )
+            .map((station) => (
+              <Marker
+                key={station.stopId}
+                coordinate={{
+                  latitude: station.coordinates.lat,
+                  longitude: station.coordinates.lng,
+                }}
+                title={station.stopName}
+              >
+                <View style={styles.markerStyle}>
+                  <Image
+                    source={require('../assets/images/marker.png')}
+                    style={styles.imageStyle}
+                  />
                 </View>
-              </Callout>
-            </Marker>
-          ))}
+                <Callout tooltip>
+                  <View style={styles.calloutContainer}>
+                    <AsyncStationComponent2 stationIn={station} />
+                  </View>
+                </Callout>
+              </Marker>
+            ))}
         {/* <View style={styles.tempView}></View> */}
         <TouchableOpacity
           onPress={() => onSwipeBack()}

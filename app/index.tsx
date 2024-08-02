@@ -7,6 +7,7 @@ import SettingsContainer from '@/screens/SettingsContainer';
 import TrainsContainer from '@/screens/TrainsContainer';
 import { Location } from '@/types/types';
 import MapScreen from '@/components/MapView';
+import { StationProvider } from '@/contexts/StationContext';
 
 const Index = () => {
   const [selectedFamilies, setSelectedFamilies] = useState<string[]>([]);
@@ -21,25 +22,28 @@ const Index = () => {
 
   return (
     <GestureHandlerRootView style={styles.fullFlex}>
-      <PagerView style={styles.pagerView} initialPage={1} ref={pagerRef}>
-        <View key="0">
-          <MapScreen onSwipeBack={handleSwipeBack} />
-        </View>
-        <View key="1">
-          <StationFetchProvider>
+      <StationProvider>
+        <PagerView style={styles.pagerView} initialPage={1} ref={pagerRef}>
+          <View key="0">
+            <MapScreen
+              onSwipeBack={handleSwipeBack}
+              selectedFamilies={selectedFamilies}
+            />
+          </View>
+          <View key="1">
             <TrainsContainer
               selectedFamilies={selectedFamilies}
               customLocation={customLocation}
             />
-          </StationFetchProvider>
-        </View>
-        <View key="2">
-          <SettingsContainer
-            onSelectionChange={setSelectedFamilies}
-            setCustomLocation={setCustomLocation}
-          />
-        </View>
-      </PagerView>
+          </View>
+          <View key="2">
+            <SettingsContainer
+              onSelectionChange={setSelectedFamilies}
+              setCustomLocation={setCustomLocation}
+            />
+          </View>
+        </PagerView>
+      </StationProvider>
     </GestureHandlerRootView>
   );
 };

@@ -19,6 +19,7 @@ import { useStationFetch } from '@/contexts/StationFetchContext';
 import { getLineFamily } from '@/utils/trainUtils';
 import { Station } from '@/types/types';
 import { Location } from '@/types/types';
+import { useStations } from '@/contexts/StationContext';
 
 export const TrainsContainer = ({
   selectedFamilies,
@@ -27,14 +28,22 @@ export const TrainsContainer = ({
   selectedFamilies: string[];
   customLocation?: Location;
 }) => {
-  const [searchRadius, setSearchRadius] = useState(0.25);
-  const { refreshCounter, resetCountdown } = useContinuousCountdown();
-  const { location, errorMsg } = useCurrentLocation();
-  const locationToUse = customLocation || location;
-  const { nearestStations } = useNearestStations(locationToUse, searchRadius);
-  const { activeFetches, lastFetchTime } = useStationFetch();
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  const {
+    stations,
+    searchRadius,
+    setSearchRadius,
+    nearestStations,
+    resetCountdown,
+    location,
+    errorMsg,
+    lastFetchTime,
+    activeFetches,
+  } = useStations();
+  // console.log('stations length', Object.keys(stations).length);
+  // console.log(stations);
 
   const onRefresh = useCallback(() => {
     setSearchRadius(0.5);
@@ -52,7 +61,7 @@ export const TrainsContainer = ({
   const handleLoadMore = () => {
     if (!loadingMore && nearestStations.length < 20) {
       setLoadingMore(true);
-      setSearchRadius((prev) => prev + 0.25);
+      setSearchRadius(searchRadius + 0.5);
     }
   };
 
@@ -64,9 +73,7 @@ export const TrainsContainer = ({
       return null;
     }
 
-    return (
-      <AsyncStationComponent stationIn={item} refreshCounter={refreshCounter} />
-    );
+    return <AsyncStationComponent stationIn={stations[item.stopId]} />;
   };
 
   if (nearestStations.length === 0) {
@@ -85,8 +92,8 @@ export const TrainsContainer = ({
           <>
             <StatusBox
               lastRefreshTime={lastFetchTime}
-              currentLocation={locationToUse}
-              usingCurrentLocation={locationToUse !== location}
+              currentLocation={location}
+              usingCurrentLocation={true}
             />
           </>
         )}
@@ -127,7 +134,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     backgroundColor: 'white',
-    // alignItems: 'center',
   },
 });
 
